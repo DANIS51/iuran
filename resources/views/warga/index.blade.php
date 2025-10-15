@@ -1,7 +1,6 @@
 @extends('layout.admin')
 
-@section('title', 'Data Warga')
-
+ 
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
