@@ -62,6 +62,8 @@
         <a href="{{ route('warga.index') }}" class="{{ request()->is('admin/warga*') ? 'active' : '' }}">
             <i class="bi bi-people"></i> Data Warga
         </a>
+        <a href="{{ route('officer.index') }}" class="{{ request()->is ('admin/officer*') ? 'active' : ''}}">Officer</a>
+
         <a href="{{ route('iuran.index') }}" class="{{ request()->is ('admin/iuran*') ? 'active' : ''}}">Iuran</a>
         <a href="{{ route('pembayaran.index') }}" class="{{ request()->is ('admin/pembayaran*') ? 'active' : ''}}">Pembayaran</a>
        
