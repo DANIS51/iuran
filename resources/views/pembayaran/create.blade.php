@@ -20,7 +20,7 @@
 
             <div class="mb-3">
                 <label for="warga_id" class="form-label fw-semibold">Nama Warga</label>
-                <select name="warga_id" class="form-select" required>
+                <select name="warga_id" class="form-select select2" required>
                     <option value="">-- Pilih Warga --</option>
                     @foreach ($wargas as $warga)
                         <option value="{{ $warga->id }}" {{ old('warga_id') == $warga->id ? 'selected' : '' }}>
@@ -32,7 +32,7 @@
 
             <div class="mb-3">
                 <label for="iuran_id" class="form-label fw-semibold">Jenis Iuran</label>
-                <select name="iuran_id" class="form-select" required>
+                <select name="iuran_id" class="form-select select2" required>
                     <option value="">-- Pilih Iuran --</option>
                     @foreach ($iurans as $iuran)
                         <option value="{{ $iuran->id }}" {{ old('iuran_id') == $iuran->id ? 'selected' : '' }}>
