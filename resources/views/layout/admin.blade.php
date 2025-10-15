@@ -69,9 +69,12 @@
             <i class="bi bi-gear"></i> Pengaturan
         </a>
         <hr class="text-light">
-        <a href="#">
-            <i class="bi bi-box-arrow-right"></i> Logout
-        </a>
+        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit" class="btn btn-link text-white text-decoration-none p-0">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </form>
     </div>
 
     {{-- Konten --}}
