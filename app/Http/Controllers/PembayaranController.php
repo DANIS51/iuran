@@ -35,41 +35,53 @@ class PembayaranController extends Controller
         ]);
 
         $iuran = Iuran::findOrFail($request->iuran_id);
-        $totalIuran = (int) $iuran->jumlah;
+        $tarif = (int) $iuran->jumlah;     // contoh: 20000
+        $jumlahBayar = (int) $request->jumlah; // contoh: 100000
+        $periode = $iuran->periode;       // mingguan / bulanan / tahunan
+        $tanggalBase = \Carbon\Carbon::parse($request->tanggal_bayar);
 
-        // Hitung total pembayaran sebelumnya
-        $totalBayarSebelumnya = Pembayaran::where('warga_id', $request->warga_id)
-            ->where('iuran_id', $request->iuran_id)
-            ->sum('jumlah');
-
-        // Jika sudah lunas, tidak boleh tambah lagi
-        if ($totalBayarSebelumnya >= $totalIuran) {
-            return redirect()->back()
-                ->with('error', 'Iuran ini sudah lunas, tidak bisa menambah pembayaran lagi.');
+        if ($jumlahBayar < $tarif) {
+            return back()->with('error', 'Jumlah pembayaran tidak boleh kurang dari tarif iuran.');
         }
 
-        $jumlahBaru = (int) $request->jumlah;
-        $totalBayarBaru = $totalBayarSebelumnya + $jumlahBaru;
+        // Hitung berapa kali pembayaran
+        $jumlahKali = intdiv($jumlahBayar, $tarif); // misal: 100000 / 20000 = 5
+        $sisa = $jumlahBayar % $tarif; // misal: 0
 
-        // Jika total bayar melebihi jumlah iuran
-        if ($totalBayarBaru > $totalIuran) {
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Total pembayaran melebihi jumlah iuran yang harus dibayar!');
+        $tanggalSekarang = $tanggalBase->copy();
+
+        for ($i = 0; $i < $jumlahKali; $i++) {
+            Pembayaran::create([
+                'warga_id' => $request->warga_id,
+                'iuran_id' => $request->iuran_id,
+                'tanggal_bayar' => $tanggalSekarang->format('Y-m-d'),
+                'jumlah' => $tarif,
+                'status' => 'lunas',
+            ]);
+
+            // Tambah tanggal berdasarkan periode
+            if ($periode === 'mingguan') {
+                $tanggalSekarang->addWeek();
+            } elseif ($periode === 'bulanan') {
+                $tanggalSekarang->addMonth();
+            } elseif ($periode === 'tahunan') {
+                $tanggalSekarang->addYear();
+            }
         }
 
-        // Tentukan status otomatis
-        $status = $totalBayarBaru >= $totalIuran ? 'lunas' : 'belum';
+        // Kalau ada sisa uang (tidak genap tarif)
+        if ($sisa > 0) {
+            Pembayaran::create([
+                'warga_id' => $request->warga_id,
+                'iuran_id' => $request->iuran_id,
+                'tanggal_bayar' => $tanggalSekarang->format('Y-m-d'),
+                'jumlah' => $sisa,
+                'status' => 'belum',
+            ]);
+        }
 
-        Pembayaran::create([
-            'warga_id' => $request->warga_id,
-            'iuran_id' => $request->iuran_id,
-            'tanggal_bayar' => $request->tanggal_bayar,
-            'jumlah' => $jumlahBaru,
-            'status' => $status,
-        ]);
-
-        return redirect()->route('pembayaran.index')->with('success', 'Pembayaran berhasil ditambahkan.');
+        return redirect()->route('pembayaran.index')
+            ->with('success', "Pembayaran berhasil dicatat sebanyak {$jumlahKali} kali.");
     }
 
     // ===================== EDIT =====================
