@@ -59,14 +59,14 @@ class PembayaranController extends Controller
                 'status' => 'lunas',
             ]);
 
-            // Tambah tanggal berdasarkan periode
-            if ($periode === 'mingguan') {
-                $tanggalSekarang->addWeek();
-            } elseif ($periode === 'bulanan') {
-                $tanggalSekarang->addMonth();
-            } elseif ($periode === 'tahunan') {
-                $tanggalSekarang->addYear();
-            }
+            // // Tambah tanggal berdasarkan periode
+            // if ($periode === 'mingguan') {
+            //     $tanggalSekarang->addWeek();
+            // } elseif ($periode === 'bulanan') {
+            //     $tanggalSekarang->addMonth();
+            // } elseif ($periode === 'tahunan') {
+            //     $tanggalSekarang->addYear();
+            // }
         }
 
         // Kalau ada sisa uang (tidak genap tarif)
