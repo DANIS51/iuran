@@ -33,12 +33,14 @@ class PembayaranController extends Controller
             'warga_id' => 'required|exists:wargas,id',
             'iuran_id' => 'required|exists:iurans,id',
             'tanggal_bayar' => 'required|date',
+            'jumlah_periode' => 'required|integer|min:1',
             'jumlah' => 'required|numeric|min:1',
         ]);
 
         $iuran = Iuran::findOrFail($request->iuran_id);
         $tarif = (int) $iuran->jumlah;      // contoh: 20000 per periode
-        $jumlahBayar = (int) $request->jumlah; // contoh: 10000 / 100000
+        $jumlahPeriode = (int) $request->jumlah_periode; // jumlah periode yang dibayar
+        $jumlahBayar = (int) $request->jumlah; // jumlah yang dibayar (bisa cicil atau penuh beberapa periode)
         $periode = strtolower($iuran->periode); // mingguan / bulanan / tahunan
         $tanggalInput = Carbon::parse($request->tanggal_bayar);
 
