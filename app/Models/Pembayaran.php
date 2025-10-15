@@ -10,7 +10,7 @@ class Pembayaran extends Model
     //
     use HasFactory;
 
-     protected $fillable = ['warga_id', 'iuran_id', 'tanggal_bayar', 'status', 'jumlah'];
+     protected $fillable = ['warga_id', 'iuran_id', 'tanggal_bayar', 'status', 'jumlah', 'jumlah_periode'];
 
      public function warga(){
         return $this->belongsTo(Warga::class);

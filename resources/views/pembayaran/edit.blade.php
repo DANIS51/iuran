@@ -47,6 +47,12 @@
             </div>
 
             <div class="mb-3">
+                <label for="jumlah_periode" class="form-label fw-semibold">Jumlah Periode</label>
+                <input type="number" name="jumlah_periode" class="form-control" value="{{ $pembayaran->jumlah_periode }}" min="1" required>
+                <small class="form-text text-muted">Masukkan jumlah periode yang ingin dibayar (misal: 1 untuk 1 bulan, 3 untuk 3 bulan).</small>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label fw-semibold">Jumlah Bayar (Rp)</label>
                 <input type="number" name="jumlah" class="form-control" value="{{ $pembayaran->jumlah }}" required>
             </div>

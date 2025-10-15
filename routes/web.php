@@ -52,6 +52,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::get('/pembayaran/create', [PembayaranController::class, 'create'])->name('pembayaran.create');
     Route::post('/pembayaran/store', [PembayaranController::class, 'store'])->name('pembayaran.store');
+    Route::delete('/pembayaran/bulk-delete', [PembayaranController::class, 'bulkDelete'])->name('pembayaran.bulkDelete');
     Route::get('/pembayaran/{id}/edit', [PembayaranController::class, 'edit'])->name('pembayaran.edit');
     Route::put('/pembayaran/{id}', [PembayaranController::class, 'update'])->name('pembayaran.update');
     Route::delete('/pembayaran/{id}', [PembayaranController::class, 'destroy'])->name('pembayaran.destroy');
@@ -80,4 +81,5 @@ Route::prefix('officer')->middleware(['auth', 'role:officer'])->group(function (
     Route::get('/pembayaran/{id}/edit', [PembayaranController::class, 'edit'])->name('officer.pembayaran.edit');
     Route::put('/pembayaran/{id}', [PembayaranController::class, 'update'])->name('officer.pembayaran.update');
     Route::delete('/pembayaran/{id}', [PembayaranController::class, 'destroy'])->name('officer.pembayaran.destroy');
+    Route::delete('/pembayaran/bulk-delete', [PembayaranController::class, 'bulkDelete'])->name('officer.pembayaran.bulkDelete');
 });
