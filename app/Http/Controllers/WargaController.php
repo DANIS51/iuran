@@ -22,12 +22,50 @@ class WargaController extends Controller
             ->take(5)
             ->get();
 
+        // Hitung total pemasukan dari pembayaran dan keuangan
+        $totalPemasukan = $totalPembayaran + \App\Models\Keuangan::where('tipe', 'masuk')->sum('jumlah');
+        $totalPengeluaran = \App\Models\Keuangan::where('tipe', 'keluar')->sum('jumlah');
+
+        // Ambil semua transaksi keuangan (pembayaran + keuangan)
+        $transaksiPembayaran = Pembayaran::with(['warga', 'iuran'])
+            ->orderBy('tanggal_bayar', 'desc')
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'tanggal' => $p->tanggal_bayar,
+                    'tipe' => 'masuk',
+                    'keterangan' => 'Pembayaran ' . ($p->iuran->nama_iuran ?? 'Iuran') . ' - ' . ($p->warga->nama ?? 'Warga'),
+                    'jumlah' => $p->jumlah,
+                    'sumber' => 'pembayaran',
+                ];
+            });
+
+        $transaksiKeuangan = \App\Models\Keuangan::orderBy('tanggal', 'desc')
+            ->get()
+            ->map(function ($k) {
+                return [
+                    'tanggal' => $k->tanggal,
+                    'tipe' => $k->tipe,
+                    'keterangan' => $k->keterangan,
+                    'jumlah' => $k->jumlah,
+                    'sumber' => 'keuangan',
+                ];
+            });
+
+        // Gabungkan dan urutkan berdasarkan tanggal
+        $semuaTransaksi = $transaksiPembayaran->concat($transaksiKeuangan)
+            ->sortByDesc('tanggal')
+            ->take(10); // Ambil 10 terbaru
+
         return view('warga.dashboard', compact(
             'totalWarga',
             'totalIuran',
             'totalPembayaran',
             'pembayaranLunas',
-            'pembayaranTerbaru'
+            'pembayaranTerbaru',
+            'semuaTransaksi',
+            'totalPemasukan',
+            'totalPengeluaran'
         ));
     }
     #Menampilkan seluruh data warga

@@ -18,4 +18,9 @@ class Pembayaran extends Model
      public function iuran(){
         return $this->belongsTo(Iuran::class);
      }
+     public function keuangan()
+{
+    return $this->hasOne(Keuangan::class);
+}
+
 }

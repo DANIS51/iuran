@@ -165,6 +165,9 @@
         <a href="{{ route('pembayaran.index') }}" class="{{ request()->is('admin/pembayaran*') ? 'active' : '' }}">
             <i class="bi bi-credit-card me-2"></i> Pembayaran
         </a>
+          <a href="{{ route('keuangan.index') }}" class="{{ request()->is('admin/keuangan*') ? 'active' : '' }}">
+            <i class="bi bi-credit-card me-2"></i> Keuangan
+        </a>
         <a href="#">
             <i class="bi bi-gear me-2"></i> Pengaturan
         </a>

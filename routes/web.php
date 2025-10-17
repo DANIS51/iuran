@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KeuanganController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WargaController;
@@ -56,6 +57,12 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/pembayaran/{id}/edit', [PembayaranController::class, 'edit'])->name('pembayaran.edit');
     Route::put('/pembayaran/{id}', [PembayaranController::class, 'update'])->name('pembayaran.update');
     Route::delete('/pembayaran/{id}', [PembayaranController::class, 'destroy'])->name('pembayaran.destroy');
+
+ Route::get('/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
+Route::get('/keuangan/create', [KeuanganController::class, 'create'])->name('keuangan.create');
+Route::post('/keuangan', [KeuanganController::class, 'store'])->name('keuangan.store');
+Route::delete('/keuangan/{id}', [KeuanganController::class, 'destroy'])->name('keuangan.destroy');
+
 
     // Data Officer
     Route::get('/officer', [OfficerController::class, 'index'])->name('officer.index');
