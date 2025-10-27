@@ -51,6 +51,7 @@
                         <th>Tanggal Bayar</th>
                         <th>Total Bayar</th>
                         <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,10 +85,21 @@
                                     <span class="badge bg-warning text-dark">Belum Lunas</span>
                                 @endif
                             </td>
+                            <td>
+                                @if(auth()->user()->role == 'admin')
+                                    <a href="{{ route('pembayaran.edit', $pembayaran->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                @else
+                                    <a href="{{ route('officer.pembayaran.edit', $pembayaran->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center py-4 text-muted">
+                            <td colspan="11" class="text-center py-4 text-muted">
                                 <i class="bi bi-inbox me-2"></i> Belum ada data pembayaran.
                             </td>
                         </tr>
@@ -100,7 +112,7 @@
                         <td></td>
                         <td>Rp{{ number_format($totalJumlah, 0, ',', '.') }}</td>
                         <td></td>
-                    </tr>
+                        <td></td>
                 </tbody>
             </table>
         </div>

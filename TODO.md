@@ -1,5 +1,9 @@
-# TODO: Implement Logout in Admin View
+# TODO: Add Edit Feature for Pembayaran
 
 ## Tasks
 
--   [ ] Edit `resources/views/layout/admin.blade.php` to replace placeholder logout link with a secure POST form that submits to the logout route, ensuring it redirects to the login view.
+-   [ ] Add "Aksi" header to the pembayaran index table
+-   [ ] Add actions column to each row with edit and delete buttons
+-   [ ] Update colspan in empty and total rows to 11
+-   [ ] Use conditional route names based on user role (admin vs officer)
+-   [ ] Test the edit functionality
