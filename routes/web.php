@@ -89,4 +89,7 @@ Route::prefix('officer')->middleware(['auth', 'role:officer'])->group(function (
     Route::put('/pembayaran/{id}', [PembayaranController::class, 'update'])->name('officer.pembayaran.update');
     Route::delete('/pembayaran/{id}', [PembayaranController::class, 'destroy'])->name('officer.pembayaran.destroy');
     Route::delete('/pembayaran/bulk-delete', [PembayaranController::class, 'bulkDelete'])->name('officer.pembayaran.bulkDelete');
+
+    // Officer bisa mengelola keuangan
+    Route::get('/keuangan', [KeuanganController::class, 'index'])->name('officer.keuangan');
 });
