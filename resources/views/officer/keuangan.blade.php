@@ -23,10 +23,15 @@
     @endif
 
     {{-- Tombol Tambah --}}
-    <div class="mb-3">
-        <a href="{{ route('officer.keuangan.create') }}" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Tambah Transaksi
-        </a>
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{{ route('officer.keuangan.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Tambah Transaksi
+            </a>
+        </div>
+        <div class="text-end">
+            <small class="text-muted">Breakdown: Pembayaran = Rp{{ number_format($totalPembayaran ?? 0, 0, ',', '.') }}; Kas Masuk = Rp{{ number_format($totalMasukKeuangan ?? 0, 0, ',', '.') }}; Net Keuangan = Rp{{ number_format($keuanganNet ?? 0, 0, ',', '.') }}</small>
+        </div>
     </div>
 
     {{-- Tabel Keuangan --}}
@@ -57,7 +62,11 @@
                                 @endif
                             </td>
                             <td class="{{ $k->tipe === 'masuk' ? 'text-success' : 'text-danger' }}">
-                                Rp{{ number_format($k->jumlah, 0, ',', '.') }}
+                                @if ($k->tipe === 'masuk')
+                                    Rp{{ number_format($k->jumlah, 0, ',', '.') }}
+                                @else
+                                    -Rp{{ number_format($k->jumlah, 0, ',', '.') }}
+                                @endif
                             </td>
                             <td>{{ $k->keterangan ?? '-' }}</td>
                             <td>{{ $k->pembayaran_id ?? '-' }}</td>
@@ -83,9 +92,15 @@
                 </tbody>
                 <tfoot class="table-light">
                     <tr>
-                        <th colspan="3" class="text-end">Total Uang Masuk:</th>
+                        <th colspan="3" class="text-end">Total Pembayaran (masuk):</th>
                         <th colspan="4" class="text-success">
-                            Rp{{ number_format($totalMasuk, 0, ',', '.') }}
+                            Rp{{ number_format($totalPembayaran ?? 0, 0, ',', '.') }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="3" class="text-end">Total Kas Masuk:</th>
+                        <th colspan="4" class="text-success">
+                            Rp{{ number_format($totalMasukKeuangan ?? 0, 0, ',', '.') }}
                         </th>
                     </tr>
                     <tr>
