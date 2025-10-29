@@ -7,6 +7,7 @@ use App\Models\Iuran;
 use App\Models\Warga;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PembayaranController extends Controller
 {
@@ -15,6 +16,12 @@ class PembayaranController extends Controller
     {
         $pembayarans = Pembayaran::with(['warga', 'iuran'])->get();
         $totalJumlah = $pembayarans->sum('jumlah');
+        
+        // Cek role user
+        if(Auth::user()->role == 'officer') {
+            return view('officer.pembayaran', compact('pembayarans', 'totalJumlah'));
+        }
+        
         $totalPeriode = $pembayarans->sum('jumlah_periode');
         return view('pembayaran.index', compact('pembayarans', 'totalJumlah', 'totalPeriode'));
     }

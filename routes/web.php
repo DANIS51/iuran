@@ -82,7 +82,7 @@ Route::prefix('officer')->middleware(['auth', 'role:officer'])->group(function (
     })->name('officer.dashboard');
 
     // Officer bisa mengelola pembayaran warga
-    Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('officer.pembayaran.index');
+    Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('officer.pembayaran');
     Route::get('/pembayaran/create', [PembayaranController::class, 'create'])->name('officer.pembayaran.create');
     Route::post('/pembayaran/store', [PembayaranController::class, 'store'])->name('officer.pembayaran.store');
     Route::get('/pembayaran/{id}/edit', [PembayaranController::class, 'edit'])->name('officer.pembayaran.edit');
