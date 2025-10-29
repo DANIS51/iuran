@@ -83,4 +83,22 @@ class KeuanganController extends Controller
         return redirect()->route(Auth::user()->role == 'officer' ? 'officer.keuangan' : 'keuangan.index')
             ->with('success', 'Data keuangan berhasil dihapus.');
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        if (!$ids) {
+            return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
+        }
+
+        Keuangan::whereIn('id', $ids)->delete();
+
+        $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+        if ($isOfficer) {
+            return redirect()->route('officer.keuangan')->with('success', 'Data keuangan terpilih berhasil dihapus.');
+        }
+
+        return redirect()->back()->with('success', 'Data keuangan terpilih berhasil dihapus.');
+    }
 }

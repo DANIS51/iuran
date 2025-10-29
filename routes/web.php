@@ -24,6 +24,12 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Safety: jika ada yang membuka URL bulk-delete langsung (GET), arahkan kembali ke daftar officer.
+// Ini mencegah NotFound saat seseorang mengetik URL di browser. Aksi penghapusan tetap hanya via DELETE.
+Route::get('/officer/keuangan/bulk-delete', function () {
+    return redirect('/officer/keuangan');
+});
+
 // ✅ =============================
 // ✅ ADMIN ROUTE
 // ✅ =============================
@@ -88,11 +94,16 @@ Route::prefix('officer')->middleware(['auth', 'role:officer'])->group(function (
     Route::get('/pembayaran/{id}/edit', [PembayaranController::class, 'edit'])->name('officer.pembayaran.edit');
     Route::put('/pembayaran/{id}', [PembayaranController::class, 'update'])->name('officer.pembayaran.update');
     Route::delete('/pembayaran/{id}', [PembayaranController::class, 'destroy'])->name('officer.pembayaran.destroy');
-    Route::delete('/pembayaran/bulk-delete', [PembayaranController::class, 'bulkDelete'])->name('officer.pembayaran.bulkDelete');
 
     // Officer bisa mengelola keuangan
     Route::get('/keuangan', [KeuanganController::class, 'index'])->name('officer.keuangan');
     Route::get('/keuangan/create', [KeuanganController::class, 'create'])->name('officer.keuangan.create');
     Route::post('/keuangan/store', [KeuanganController::class, 'store'])->name('officer.keuangan.store');
     Route::delete('/keuangan/{id}', [KeuanganController::class, 'destroy'])->name('officer.keuangan.destroy');
+    // bulk-delete expects DELETE (form uses method spoofing). Provide a GET redirect so
+    // visiting the URL in a browser (GET) doesn't return 404 — it just redirects to index.
+    Route::get('/keuangan/bulk-delete', function () {
+        return redirect()->route('officer.keuangan');
+    });
+    Route::delete('/keuangan/bulk-delete', [KeuanganController::class, 'bulkDelete'])->name('officer.keuangan.bulkDelete');
 });

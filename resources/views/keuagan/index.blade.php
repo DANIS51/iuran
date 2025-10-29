@@ -74,7 +74,8 @@
                                 {{--  <a href="{{ route('keuangan.edit', $k->id) }}" class="btn btn-sm btn-warning">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>  --}}
-                                <form action="{{ route('keuangan.destroy', $k->id) }}" method="POST" class="d-inline"
+                                @php $isOfficer = auth()->check() && auth()->user()->role === 'officer'; @endphp
+                                <form action="{{ $isOfficer ? route('officer.keuangan.destroy', $k->id) : route('keuangan.destroy', $k->id) }}" method="POST" class="d-inline"
                                     onsubmit="return confirm('Yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')

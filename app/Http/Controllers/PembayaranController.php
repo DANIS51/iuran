@@ -16,13 +16,13 @@ class PembayaranController extends Controller
     {
         $pembayarans = Pembayaran::with(['warga', 'iuran'])->get();
         $totalJumlah = $pembayarans->sum('jumlah');
-        
+        $totalPeriode = $pembayarans->sum('jumlah_periode');
+
         // Cek role user
         if(Auth::user()->role == 'officer') {
-            return view('officer.pembayaran', compact('pembayarans', 'totalJumlah'));
+            return view('officer.pembayaran', compact('pembayarans', 'totalJumlah', 'totalPeriode'));
         }
-        
-        $totalPeriode = $pembayarans->sum('jumlah_periode');
+
         return view('pembayaran.index', compact('pembayarans', 'totalJumlah', 'totalPeriode'));
     }
 
@@ -183,22 +183,4 @@ class PembayaranController extends Controller
         return redirect($redirect)
             ->with('success', 'Pembayaran berhasil dihapus.');
     }
-    public function bulkDelete(Request $request)
-{
-    $ids = $request->input('ids');
-
-    if (!$ids) {
-        return redirect()->back()->with('error', 'Tidak ada data yang dipilih.');
-    }
-
-    Pembayaran::whereIn('id', $ids)->delete();
-
-    $isOfficer = Auth::user() && Auth::user()->role === 'officer';
-    if ($isOfficer) {
-        return redirect()->route('officer.pembayaran')->with('success', 'Data pembayaran terpilih berhasil dihapus.');
-    }
-
-    return redirect()->back()->with('success', 'Data pembayaran terpilih berhasil dihapus.');
-}
-
 }
