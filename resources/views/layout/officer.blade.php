@@ -89,9 +89,12 @@
             <i class="bi bi-cash-stack"></i> Keuangan
         </a>
 
-        <a href="{{ route('logout') }}" class="logout">
-            <i class="bi bi-box-arrow-right"></i> Logout
-        </a>
+        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="logout" style="background: none; border: none; padding: 12px 20px; margin: 5px 12px; border-radius: 10px; transition: all 0.3s ease; width: calc(100% - 24px); text-align: left;">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </form>
     </div>
 
     {{-- Main Content --}}
