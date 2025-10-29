@@ -1,4 +1,4 @@
-@extends('layout.admin')
+@extends('layout.officer')
 
 @section('title', 'Data Petugas')
 

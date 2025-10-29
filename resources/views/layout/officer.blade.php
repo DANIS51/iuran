@@ -85,7 +85,7 @@
             <i class="bi bi-wallet2"></i> Pembayaran
         </a>
 
-        {{--  <a href="{{ route('officer.keuangan') }}" class="{{ request()->routeIs('officer.keuangan') ? 'active' : '' }}">  --}}
+        <a href="{{ route('officer.keuangan') }}" class="{{ request()->routeIs('officer.keuangan') ? 'active' : '' }}">
             <i class="bi bi-cash-stack"></i> Keuangan
         </a>
 

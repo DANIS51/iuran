@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Keuangan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KeuanganController extends Controller
 {
@@ -25,17 +26,27 @@ class KeuanganController extends Controller
         // saldo akhir = total masuk - total keluar
         $saldoAkhir = $totalMasuk - $totalKeluar;
 
-        // kirim ke view
-        return view('keuagan.index', [
+        // Data yang akan dikirim ke view
+        $viewData = [
             'keuangans' => $keuangans,
             'totalMasuk' => $totalMasuk,
             'totalKeluar' => $totalKeluar,
             'saldoAkhir' => $saldoAkhir,
-        ]);
+        ];
+
+        // Cek role user dan arahkan ke view yang sesuai
+        if(Auth::user()->role == 'officer') {
+            return view('officer.keuangan', $viewData);
+        }
+        
+        return view('keuagan.index', $viewData);
     }
 
     public function create()
     {
+        if(Auth::user()->role == 'officer') {
+            return view('officer.keuangan.create');
+        }
         return view('keuagan.create');
     }
 
@@ -50,7 +61,7 @@ class KeuanganController extends Controller
 
         Keuangan::create($request->only(['tipe', 'keterangan', 'jumlah', 'tanggal']));
 
-        return redirect()->route('keuangan.index')
+        return redirect()->route(Auth::user()->role == 'officer' ? 'officer.keuangan' : 'keuangan.index')
             ->with('success', 'Data keuangan berhasil ditambahkan.');
     }
 
@@ -58,7 +69,7 @@ class KeuanganController extends Controller
     {
         Keuangan::findOrFail($id)->delete();
 
-        return redirect()->route('keuangan.index')
+        return redirect()->route(Auth::user()->role == 'officer' ? 'officer.keuangan' : 'keuangan.index')
             ->with('success', 'Data keuangan berhasil dihapus.');
     }
 }

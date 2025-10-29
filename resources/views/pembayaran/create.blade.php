@@ -1,4 +1,4 @@
-@extends('layout.admin')
+@extends(isset($isOfficer) && $isOfficer ? 'layout.officer' : 'layout.admin')
 
 @section('title', 'Tambah Pembayaran')
 
@@ -15,7 +15,7 @@
     @endif
 
     <div class="card shadow-sm border-0 rounded-4 p-4">
-        <form action="{{ route('pembayaran.store') }}" method="POST">
+        <form action="{{ isset($isOfficer) && $isOfficer ? route('officer.pembayaran.store') : route('pembayaran.store') }}" method="POST">
             @csrf
 
             <div class="mb-3">

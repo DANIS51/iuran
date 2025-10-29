@@ -31,7 +31,8 @@ class PembayaranController extends Controller
     {
         $wargas = Warga::all();
         $iurans = Iuran::all();
-        return view('pembayaran.create', compact('wargas', 'iurans'));
+        $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+        return view('pembayaran.create', compact('wargas', 'iurans', 'isOfficer'));
     }
 
     // ===================== STORE =====================
@@ -92,7 +93,9 @@ class PembayaranController extends Controller
                 'tanggal_bayar' => $tanggalInput->format('Y-m-d'),
             ]);
 
-            return redirect()->route('pembayaran.index')
+            $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+            $redirect = $isOfficer ? route('officer.pembayaran') : route('pembayaran.index');
+            return redirect($redirect)
                 ->with('success', 'Pembayaran berhasil ditambahkan ke cicilan sebelumnya.');
         } else {
             // Buat record baru
@@ -107,7 +110,9 @@ class PembayaranController extends Controller
                 'jumlah_periode' => $jumlahPeriode,
             ]);
 
-            return redirect()->route('pembayaran.index')
+            $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+            $redirect = $isOfficer ? route('officer.pembayaran') : route('pembayaran.index');
+            return redirect($redirect)
                 ->with('success', 'Pembayaran berhasil dicatat.');
         }
     }
@@ -120,7 +125,8 @@ class PembayaranController extends Controller
         $pembayaran = Pembayaran::findOrFail($id);
         $wargas = Warga::all();
         $iurans = Iuran::all();
-        return view('pembayaran.edit', compact('pembayaran', 'wargas', 'iurans'));
+        $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+        return view('pembayaran.edit', compact('pembayaran', 'wargas', 'iurans', 'isOfficer'));
     }
 
     // ===================== UPDATE =====================
@@ -161,7 +167,9 @@ class PembayaranController extends Controller
             'jumlah_periode' => $jumlahPeriode,
         ]);
 
-        return redirect()->route('pembayaran.index')->with('success', 'Pembayaran berhasil diperbarui.');
+        $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+        $redirect = $isOfficer ? route('officer.pembayaran') : route('pembayaran.index');
+        return redirect($redirect)->with('success', 'Pembayaran berhasil diperbarui.');
     }
 
     // ===================== DESTROY =====================
@@ -170,7 +178,9 @@ class PembayaranController extends Controller
         $pembayaran = Pembayaran::findOrFail($id);
         $pembayaran->delete();
 
-        return redirect()->route('pembayaran.index')
+        $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+        $redirect = $isOfficer ? route('officer.pembayaran') : route('pembayaran.index');
+        return redirect($redirect)
             ->with('success', 'Pembayaran berhasil dihapus.');
     }
     public function bulkDelete(Request $request)
@@ -182,6 +192,11 @@ class PembayaranController extends Controller
     }
 
     Pembayaran::whereIn('id', $ids)->delete();
+
+    $isOfficer = Auth::user() && Auth::user()->role === 'officer';
+    if ($isOfficer) {
+        return redirect()->route('officer.pembayaran')->with('success', 'Data pembayaran terpilih berhasil dihapus.');
+    }
 
     return redirect()->back()->with('success', 'Data pembayaran terpilih berhasil dihapus.');
 }
