@@ -14,9 +14,9 @@ use App\Http\Controllers\OfficerController;
 |--------------------------------------------------------------------------
 */
 
-// ✅ Redirect utama ke login
+// ✅ Halaman utama aplikasi
 Route::get('/', function () {
-    return redirect('/login');
+    return view('home');
 });
 
 // ✅ Route Auth (login & logout)
