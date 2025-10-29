@@ -6,7 +6,7 @@ use App\Models\Iuran;
 use App\Models\Pembayaran;
 use App\Models\Warga;
 use Illuminate\Http\Request;
- 
+
 class WargaController extends Controller
 {
     //
@@ -25,6 +25,7 @@ class WargaController extends Controller
         // Hitung total pemasukan dari pembayaran dan keuangan
         $totalPemasukan = $totalPembayaran + \App\Models\Keuangan::where('tipe', 'masuk')->sum('jumlah');
         $totalPengeluaran = \App\Models\Keuangan::where('tipe', 'keluar')->sum('jumlah');
+        $saldoAkhir = $totalPemasukan - $totalPengeluaran;
 
         // Ambil semua transaksi keuangan (pembayaran + keuangan)
         $transaksiPembayaran = Pembayaran::with(['warga', 'iuran'])
@@ -65,7 +66,8 @@ class WargaController extends Controller
             'pembayaranTerbaru',
             'semuaTransaksi',
             'totalPemasukan',
-            'totalPengeluaran'
+            'totalPengeluaran',
+            'saldoAkhir'
         ));
     }
     #Menampilkan seluruh data warga
@@ -101,7 +103,7 @@ class WargaController extends Controller
             'alamat' => 'required|string',
             'no_telepon'=> 'required|string|max:13',
             'jenis_kelamin'=> 'nullable|in:Laki-Laki,Perempuan',
-            
+
         ]);
 
         $warga = Warga::findOrFail($id);

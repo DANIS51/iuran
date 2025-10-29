@@ -4,37 +4,43 @@
 
 @section('content')
 <div class="container py-4">
+
     {{-- Judul Halaman --}}
-    <div class="d-flex align-items-center mb-4">
-        <i class="bi bi-speedometer2 text-primary fs-1 me-2"></i>
+    <div class="d-flex align-items-center mb-4 border-bottom pb-2">
+        <i class="bi bi-speedometer2 text-primary fs-1 me-3"></i>
         <h2 class="fw-bold mb-0 text-dark">Dashboard</h2>
     </div>
 
     {{-- Statistik Utama --}}
     <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="card stat-card text-center p-3 rounded-4 border-0 shadow-sm">
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center border-0 shadow-sm rounded-4 p-4 h-100">
                 <i class="bi bi-people-fill text-primary fs-1 mb-2"></i>
                 <h4 class="fw-bold text-dark mb-1">{{ $totalWarga }}</h4>
                 <p class="text-muted mb-0">Total Warga</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stat-card text-center p-3 rounded-4 border-0 shadow-sm">
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center border-0 shadow-sm rounded-4 p-4 h-100">
                 <i class="bi bi-cash-coin text-success fs-1 mb-2"></i>
                 <h4 class="fw-bold text-dark mb-1">{{ $totalIuran }}</h4>
                 <p class="text-muted mb-0">Total Iuran</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stat-card text-center p-3 rounded-4 border-0 shadow-sm">
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center border-0 shadow-sm rounded-4 p-4 h-100">
                 <i class="bi bi-wallet2 text-info fs-1 mb-2"></i>
-                <h4 class="fw-bold text-dark mb-1">Rp{{ number_format($totalPembayaran, 0, ',', '.') }}</h4>
+                <h4 class="fw-bold text-dark mb-1">
+                    Rp{{ number_format($totalPembayaran, 0, ',', '.') }}
+                </h4>
                 <p class="text-muted mb-0">Total Pembayaran</p>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card stat-card text-center p-3 rounded-4 border-0 shadow-sm">
+
+        <div class="col-md-3 col-sm-6">
+            <div class="card text-center border-0 shadow-sm rounded-4 p-4 h-100">
                 <i class="bi bi-check2-circle text-primary fs-1 mb-2"></i>
                 <h4 class="fw-bold text-dark mb-1">{{ $pembayaranLunas }}</h4>
                 <p class="text-muted mb-0">Pembayaran Lunas</p>
@@ -44,26 +50,42 @@
 
     {{-- Statistik Keuangan --}}
     <div class="row g-4 mb-5">
-        <div class="col-md-6">
-            <div class="card stat-card border-0 rounded-4 p-4 text-center shadow-sm bg-gradient bg-opacity-10">
+        <div class="col-md-4">
+            <div class="card text-center border-0 shadow-sm rounded-4 p-4 h-100">
                 <i class="bi bi-graph-up text-success fs-1 mb-2"></i>
-                <h4 class="fw-bold text-dark mb-1">Rp{{ number_format($totalPemasukan, 0, ',', '.') }}</h4>
+                <h4 class="fw-bold text-dark mb-1">
+                    Rp{{ number_format($totalPemasukan, 0, ',', '.') }}
+                </h4>
                 <p class="text-muted mb-0">Total Pemasukan</p>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card stat-card border-0 rounded-4 p-4 text-center shadow-sm bg-gradient bg-opacity-10">
+
+        <div class="col-md-4">
+            <div class="card text-center border-0 shadow-sm rounded-4 p-4 h-100">
                 <i class="bi bi-graph-down text-danger fs-1 mb-2"></i>
-                <h4 class="fw-bold text-dark mb-1">Rp{{ number_format($totalPengeluaran, 0, ',', '.') }}</h4>
+                <h4 class="fw-bold text-dark mb-1">
+                    Rp{{ number_format($totalPengeluaran, 0, ',', '.') }}
+                </h4>
                 <p class="text-muted mb-0">Total Pengeluaran</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center border-0 shadow-sm rounded-4 p-4 h-100">
+                <i class="bi bi-wallet2 text-primary fs-1 mb-2"></i>
+                <h4 class="fw-bold text-dark mb-1">
+                    Rp{{ number_format($saldoAkhir, 0, ',', '.') }}
+                </h4>
+                <p class="text-muted mb-0">Saldo Akhir</p>
             </div>
         </div>
     </div>
 
     {{-- Tabel Pembayaran Terbaru --}}
-    <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-header bg-primary text-white fw-bold d-flex align-items-center rounded-top-4">
-            <i class="bi bi-clock-history me-2 fs-5"></i> Pembayaran Terbaru
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white fw-semibold d-flex align-items-center">
+            <i class="bi bi-clock-history me-2 fs-5"></i>
+            Pembayaran Terbaru
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -96,7 +118,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-muted py-4">Belum ada pembayaran terbaru.</td>
+                                <td colspan="6" class="text-muted py-4">
+                                    Belum ada pembayaran terbaru.
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -105,6 +129,7 @@
         </div>
     </div>
 </div>
+
 
 {{-- Style tambahan --}}
 <style>
