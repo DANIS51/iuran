@@ -64,10 +64,17 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/pembayaran/{id}', [PembayaranController::class, 'update'])->name('pembayaran.update');
     Route::delete('/pembayaran/{id}', [PembayaranController::class, 'destroy'])->name('pembayaran.destroy');
 
- Route::get('/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
-Route::get('/keuangan/create', [KeuanganController::class, 'create'])->name('keuangan.create');
-Route::post('/keuangan', [KeuanganController::class, 'store'])->name('keuangan.store');
-Route::delete('/keuangan/{id}', [KeuanganController::class, 'destroy'])->name('keuangan.destroy');
+    Route::get('/keuangan', [KeuanganController::class, 'index'])->name('keuangan.index');
+    Route::get('/keuangan/create', [KeuanganController::class, 'create'])->name('keuangan.create');
+    Route::post('/keuangan', [KeuanganController::class, 'store'])->name('keuangan.store');
+    Route::get('/keuangan/{id}/edit', [KeuanganController::class, 'edit'])->name('keuangan.edit');
+    Route::put('/keuangan/{id}', [KeuanganController::class, 'update'])->name('keuangan.update');
+    Route::delete('/keuangan/{id}', [KeuanganController::class, 'destroy'])->name('keuangan.destroy');
+    // Redirect GET bulk-delete agar tidak Not Found
+    Route::get('/keuangan/bulk-delete', function () {
+        return redirect()->route('keuangan.index');
+    });
+    Route::delete('/keuangan/bulk-delete', [KeuanganController::class, 'bulkDelete'])->name('keuangan.bulkDelete');
 
 
     // Data Officer

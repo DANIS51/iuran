@@ -35,62 +35,69 @@
     </div>
 
     {{-- Tabel Keuangan --}}
-    <div class="card shadow-sm">
-        <div class="card-body table-responsive">
-            <table class="table table-bordered align-middle text-center">
-                <thead class="table-primary">
-                    <tr>
-                        <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Tipe</th>
-                        <th>Jumlah (Rp)</th>
-                        <th>Keterangan</th>
-                        <th>Pembayaran ID</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($keuangans as $index => $k)
+    <form action="{{ route('keuangan.bulkDelete') }}" method="POST" id="bulkDeleteForm" onsubmit="return confirm('Yakin ingin menghapus data terpilih?')">
+        @csrf
+        @method('DELETE')
+        <div class="card shadow-sm">
+            <div class="card-body table-responsive">
+                <table class="table table-bordered align-middle text-center">
+                    <thead class="table-primary">
                         <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ \Carbon\Carbon::parse($k->created_at)->format('d/m/Y') }}</td>
-                            <td>
-                                @if ($k->tipe === 'masuk')
-                                    <span class="badge bg-success">Masuk</span>
-                                @else
-                                    <span class="badge bg-danger">Keluar</span>
-                                @endif
-                            </td>
-                            <td class="{{ $k->tipe === 'masuk' ? 'text-success' : 'text-danger' }}">
-                                @if ($k->tipe === 'masuk')
-                                    Rp{{ number_format($k->jumlah, 0, ',', '.') }}
-                                @else
-                                    -Rp{{ number_format($k->jumlah, 0, ',', '.') }}
-                                @endif
-                            </td>
-                            <td>{{ $k->keterangan ?? '-' }}</td>
-                            <td>{{ $k->pembayaran_id ?? '-' }}</td>
-                            <td>
-                                {{--  <a href="{{ route('keuangan.edit', $k->id) }}" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>  --}}
-                                @php $isOfficer = auth()->check() && auth()->user()->role === 'officer'; @endphp
-                                <form action="{{ $isOfficer ? route('officer.keuangan.destroy', $k->id) : route('keuangan.destroy', $k->id) }}" method="POST" class="d-inline"
-                                    onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
+                            <th><input type="checkbox" id="checkAll"></th>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Tipe</th>
+                            <th>Jumlah (Rp)</th>
+                            <th>Keterangan</th>
+                            <th>Pembayaran ID</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center text-muted">Belum ada data keuangan.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
+                    </thead>
+                    <tbody>
+                        @forelse ($keuangans as $index => $k)
+                            <tr>
+                                <td><input type="checkbox" name="ids[]" class="form-check-input checkItem" value="{{ $k->id }}"></td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ \Carbon\Carbon::parse($k->created_at)->format('d/m/Y') }}</td>
+                                <td>
+                                    @if ($k->tipe === 'masuk')
+                                        <span class="badge bg-success">Masuk</span>
+                                    @else
+                                        <span class="badge bg-danger">Keluar</span>
+                                    @endif
+                                </td>
+                                <td class="{{ $k->tipe === 'masuk' ? 'text-success' : 'text-danger' }}">
+                                    @if ($k->tipe === 'masuk')
+                                        Rp{{ number_format($k->jumlah, 0, ',', '.') }}
+                                    @else
+                                        -Rp{{ number_format($k->jumlah, 0, ',', '.') }}
+                                    @endif
+                                </td>
+                                <td>{{ $k->keterangan ?? '-' }}</td>
+                                <td>{{ $k->pembayaran_id ?? '-' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">Belum ada data keuangan.</td>
+                        @endforelse
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-danger mt-2" id="bulkDeleteBtn" disabled>Hapus Terpilih</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        document.getElementById('checkAll').addEventListener('change', function() {
+            let checked = this.checked;
+            document.querySelectorAll('.checkItem').forEach(function(cb) {
+                cb.checked = checked;
+            });
+            document.getElementById('bulkDeleteBtn').disabled = !checked && document.querySelectorAll('.checkItem:checked').length === 0;
+        });
+        document.querySelectorAll('.checkItem').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                let anyChecked = document.querySelectorAll('.checkItem:checked').length > 0;
+                document.getElementById('bulkDeleteBtn').disabled = !anyChecked;
+            });
                 <tfoot class="table-light">
                     <tr>
                         <th colspan="3" class="text-end">Total Pembayaran (masuk):</th>

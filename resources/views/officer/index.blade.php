@@ -1,4 +1,4 @@
-@extends('layout.officer')
+@extends('layout.admin')
 
 @section('title', 'Data Petugas')
 
@@ -44,15 +44,15 @@
                         </span>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('officer.edit', $officer->id) }}" 
-                           class="btn btn-sm btn-outline-warning me-1 rounded-3 shadow-sm" 
+                        <a href="{{ route('officer.edit', $officer->id) }}"
+                           class="btn btn-sm btn-outline-warning me-1 rounded-3 shadow-sm"
                            title="Edit Petugas">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-                        <form action="{{ route('officer.destroy', $officer->id) }}" 
+                        <form action="{{ route('officer.destroy', $officer->id) }}"
                               method="POST" class="d-inline">
                             @csrf @method('DELETE')
-                            <button type="submit" 
+                            <button type="submit"
                                 class="btn btn-sm btn-outline-danger rounded-3 shadow-sm"
                                 onclick="return confirm('Yakin ingin menghapus petugas ini?')"
                                 title="Hapus Petugas">
